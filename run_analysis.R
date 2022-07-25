@@ -2,8 +2,6 @@
 library(dplyr)
 library(tidyr)
 
-setwd("~/Dropbox/WORK/personal/2022/Curso cleaning data/exercises/UCI HAR Dataset/")
-
 #read the activity labels used by the data set. we will use them later for having a more human readable dataset
 activityLabels <- read.fwf(file="activity_labels.txt", widths = c(1,20))
 names(activityLabels) <- c("id, activity")
@@ -56,5 +54,8 @@ measurements_gr <- measurements_df %>%
                    summarise(meanx=mean(bodyMeanX),meany=mean(bodyMeanY),meanz=mean(bodyMeanZ), stdx=mean(bodyStdX), stdy=mean(bodyStdY), stdz=mean(bodyStdZ))
 
 #write those dataset fo csv files for later analysis
-write.csv(measurements_df, file="../measurements_dataset.csv")
-write.csv(measurements_gr, file="../measurements_summarise_dataset.csv")
+#write.table(measurements_df, file="../measurements_dataset.txt", row.name=FALSE)
+#write.table(measurements_gr, file="../measurements_summarise_dataset.txt", row.name=FALSE)
+
+#write.csv(measurements_df, file="../measurements_dataset.csv")
+#write.csv(measurements_gr, file="../measurements_summarise_dataset.csv")
