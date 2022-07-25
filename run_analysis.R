@@ -33,20 +33,18 @@ subjects <- union_all(subject_test, subject_train)
 activities <- union_all(activity_test, activity_train)
 
 #create the data frame with subjects and activities. only extract the variables related with the mean and std deviation
-measurements_df <- data.frame(subject=subjects, activity=activities, `tBodyAcc-mean()-X`=measurements$`tBodyAcc-mean()-X`,
-                                                                     `tBodyAcc-mean()-Y`=measurements$`tBodyAcc-mean()-Y`,
-                                                                     `tBodyAcc-mean()-Z`=measurements$`tBodyAcc-mean()-Z`,
-                                                                     `tBodyAcc-std()-X` =measurements$`tBodyAcc-std()-X`,
-                                                                     `tBodyAcc-std()-Y` =measurements$`tBodyAcc-std()-Y`,
-                                                                     `tBodyAcc-std()-Z` =measurements$`tBodyAcc-std()-Z`)
+measurements_df <- data.frame(subject=subjects, activity=activities)
 
+#extract the variables related with the mean and std deviation
+measurements_df <- cbind(measurements_df, measurements[grep("mean", features$feature, value=TRUE)])
+measurements_df <- cbind(measurements_df, measurements[grep("std", features$feature, value=TRUE)])
 
 #Uses descriptive activity names to name the activities in the data set
 aaname <- function(x){activityLabels[x, 2]}
 measurements_df$activity <- sapply(measurements_df$activity, aaname)
 
 #Appropriately labels the data set with descriptive variable names. 
-names(measurements_df) <- c("subject", "activity", "bodyMeanX", "bodyMeanY", "bodyMeanZ", "bodyStdX", "bodyStdY", "bodyStdZ")
+#names(measurements_df) <- c("subject", "activity", "bodyMeanX", "bodyMeanY", "bodyMeanZ", "bodyStdX", "bodyStdY", "bodyStdZ")
 
 #creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 measurements_gr <- measurements_df %>%
@@ -54,8 +52,8 @@ measurements_gr <- measurements_df %>%
                    summarise(meanx=mean(bodyMeanX),meany=mean(bodyMeanY),meanz=mean(bodyMeanZ), stdx=mean(bodyStdX), stdy=mean(bodyStdY), stdz=mean(bodyStdZ))
 
 #write those dataset fo csv files for later analysis
-#write.table(measurements_df, file="../measurements_dataset.txt", row.name=FALSE)
-#write.table(measurements_gr, file="../measurements_summarise_dataset.txt", row.name=FALSE)
+write.table(measurements_df, file="../measurements_dataset.txt", row.name=FALSE)
+write.table(measurements_gr, file="../measurements_summarise_dataset.txt", row.name=FALSE)
 
 #write.csv(measurements_df, file="../measurements_dataset.csv")
 #write.csv(measurements_gr, file="../measurements_summarise_dataset.csv")
