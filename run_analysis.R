@@ -44,11 +44,14 @@ aaname <- function(x){activityLabels[x, 2]}
 measurements_df$activity <- sapply(measurements_df$activity, aaname)
 
 #Appropriately labels the data set with descriptive variable names. 
-#names(measurements_df) <- c("subject", "activity", "bodyMeanX", "bodyMeanY", "bodyMeanZ", "bodyStdX", "bodyStdY", "bodyStdZ")
+dd <- c(grep("mean", features$feature, value=TRUE), grep("std", features$feature, value=TRUE))
+dd <- gsub("\\-","",dd)
+dd <- gsub("\\(","",dd)
+dd <- gsub("\\)","",dd)
+ee <- c("subject", "activity", dd)
+names(measurements_df) <- ee
 
 #creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-dd <- c(grep("mean", features$feature, value=TRUE), grep("std", features$feature, value=TRUE))
-
 measurements_gr <- measurements_df %>%
                    group_by(subject, activity) %>%
                    summarise(across(all_of(dd), mean))
